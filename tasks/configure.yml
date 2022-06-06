@@ -1,0 +1,21 @@
+---
+- name: Configure pg_hba.conf.
+  template:
+    src: "pg_hba.conf.j2"
+    dest: "{{ postgresql_hba_file }}"
+    owner: "{{ postgresql_user }}"
+    group: "{{ postgresql_group }}"
+    mode: 0600
+  tags:
+    - configure
+
+- name: configure PostgreSQL
+  template:
+    src: "postgresql.conf.j2"
+    dest: "{{ postgresql_config_path }}/postgresql.conf"
+    owner: "{{ postgresql_user }}"
+    group: "{{ postgresql_group }}"
+    mode: 0600
+  notify: restart postgresql
+  tags:
+    - configure

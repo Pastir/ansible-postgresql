@@ -1,3 +1,15 @@
 ---
-- include_tasks: install-Ubuntu-20.yml
-  when: ansible_os_family == 'Ubuntu' and ansible_distribution_major_version == '20'
+# Variable configuration.
+- name: Apply the db tag to the include and to all tasks in db.yaml
+  include_tasks:
+    file: variables.yml
+    apply:
+      tags: always
+  tags: always
+#
+- include_tasks: install-{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml
+  when: ansible_distribution == 'Ubuntu' and ansible_distribution_major_version == '20'
+
+- include_tasks: configure.yml
+  tags:
+    - configure

@@ -1,2 +1,5 @@
-
-
+---
+postgresql_listen_addresses: '*'
+postgresql_port: 5432
+postgresql_max_connections: 100
+postgresql_unix_socket_directories: '/var/run/postgresql'
