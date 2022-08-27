@@ -22,17 +22,41 @@
 
 - name: Add new user
   community.postgresql.postgresql_user:
-    name: "{{ db_user }}"
-    password: "{{ db_pass }}"
+    name: "{{ item.name }}"
+    password: "{{ item.passwd }}"
   become: yes
   become_user: postgres
+  loop: "{{  postgresql_db_user }}"
   tags:
     - create_user
 
+- name: Grant role
+  community.postgresql.postgresql_membership:
+    group: "{{ item.groups }}"
+    target_roles: "{{ item.name }}"
+    state: present
+  become: yes
+  become_user: postgres
+  loop: "{{  postgresql_db_user }}"
+  when: item.groups | length > 0
+  tags:
+    - create_user
+
+#- name: Revoke role
+#  community.postgresql.postgresql_membership:
+#    groups: "{{ item.groups }}"
+#    target_role: "{{ item.name }}"
+#    fail_on_role: no
+#    state: absent
+#  loop: "{{  postgresql_db_user }}"
+#  when: item.value.groups is defined
+#  tags:
+#    - revoke_user
+
 - name: Create database
   community.postgresql.postgresql_db:
-    owner: "{{ db_user }}"
-    name: "{{ db_name }}"
+    owner: "{{ postgresql_db_user }}"
+    name: "{{ postgresql_db_name }}"
   become: yes
   become_user: postgres
   tags:
