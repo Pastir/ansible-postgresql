@@ -26,7 +26,7 @@
     password: "{{ item.passwd }}"
   become: yes
   become_user: postgres
-  loop: "{{  postgresql_db_user }}"
+  loop: "{{ postgresql_db_user }}"
   tags:
     - create_user
 
@@ -37,8 +37,8 @@
     state: present
   become: yes
   become_user: postgres
-  loop: "{{  postgresql_db_user }}"
-  when: item.groups | length > 0
+  loop: "{{ postgresql_db_user }}"
+  when: item.groups is defined
   tags:
     - create_user
 
@@ -55,10 +55,22 @@
 
 - name: Create database
   community.postgresql.postgresql_db:
-    owner: "{{ postgresql_db_user }}"
-    name: "{{ postgresql_db_name }}"
+    owner: "{{ item.owner }}"
+    name: "{{ item.name }}"
   become: yes
   become_user: postgres
+  loop: "{{ postgresql_db }}"
   tags:
     - create_db
 
+- name: GRANT ALL PRIVILEGES ON SCHEMA public TO dbname
+  community.postgresql.postgresql_privs:
+    db: "{{ item.dbname }}"
+    privs: "{{ item.priv }}"
+    type: schema
+    role: "{{ item.role }}"
+  become: yes
+  become_user: postgres
+  loop: "{{ postgresql_priv }}"
+  tags:
+    - create_grant
