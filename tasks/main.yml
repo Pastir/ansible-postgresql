@@ -13,6 +13,10 @@
     file: install-{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml
   when: ansible_distribution == 'Ubuntu' and ansible_distribution_major_version == '20'
 
+- include_tasks: administration.yml
+  tags:
+    - administration
+
 - include_tasks: configure.yml
   tags:
     - configure

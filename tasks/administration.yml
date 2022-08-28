@@ -1,0 +1,72 @@
+---
+- name: Add new user
+  community.postgresql.postgresql_user:
+    name: "{{ item.role }}"
+    password: "{{ item.passwd }}"
+  become: yes
+  become_user: "{{ postgresql_user }}"
+  loop: "{{ postgresql_db_user }}"
+  tags:
+    - create_user
+
+
+- name: Create database
+  community.postgresql.postgresql_db:
+    owner: "{{ item.owner }}"
+    name: "{{ item.name }}"
+  become: yes
+  become_user: "{{ postgresql_user }}"
+  loop: "{{ postgresql_db }}"
+  tags:
+    - create_db
+
+- name: Grant role
+  community.postgresql.postgresql_membership:
+    group: "{{ item.groups }}"
+    target_role: "{{ item.role }}"
+    state: present
+  become: yes
+  become_user: "{{ postgresql_user }}"
+  loop: "{{ postgresql_db_user }}"
+  when: item.groups is defined
+  tags:
+    - create_user
+
+#- name: Revoke role
+#  community.postgresql.postgresql_membership:
+#    groups: "{{ item.groups }}"
+#    target_role: "{{ item.name }}"
+#    fail_on_role: no
+#    state: absent
+#  loop: "{{  postgresql_db_user }}"
+#  when: item.value.groups is defined
+#  tags:
+#    - revoke_user
+
+- name: REVOKE PRIV
+  community.postgresql.postgresql_privs:
+    db: "{{ item.dbname }}"
+    state: absent
+    privs: "{{ item.priv }}"
+    objs: ALL_IN_SCHEMA
+    role: "{{ item.role }}"
+  become: yes
+  become_user: "{{ postgresql_user }}"
+  loop: "{{ postgresql_db_user }}"
+  when: item.dbname is defined
+  tags:
+    - revoke_grant
+
+- name: GRANT PRIV
+  community.postgresql.postgresql_privs:
+    db: "{{ item.dbname }}"
+    state: present
+    privs: "{{ item.priv }}"
+    objs: ALL_IN_SCHEMA
+    role: "{{ item.role }}"
+  become: yes
+  become_user: "{{ postgresql_user }}"
+  loop: "{{ postgresql_db_user }}"
+  when: item.dbname is defined
+  tags:
+    - create_grant
