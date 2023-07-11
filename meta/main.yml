@@ -19,4 +19,4 @@ galaxy_info:
     - install
     - ubuntu
 
-dependencies: [community.postgresql]
+dependencies: []
