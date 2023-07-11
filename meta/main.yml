@@ -9,10 +9,6 @@ galaxy_info:
   min_ansible_version: 2.9
 
   platforms:
-    - name: EL
-      versions:
-        - 7
-        - 8
     - name: Ubuntu
       versions:
         - focal
@@ -21,5 +17,6 @@ galaxy_info:
     - postgresql
     - opensource
     - install
+    - ubuntu
 
-dependencies: []
+dependencies: [community.postgresql]

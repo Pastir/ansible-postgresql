@@ -3,9 +3,5 @@ __postgresql_version: "11"
 __postgresql_repo:  "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main"
 __repo_signing_key: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
 __postgresql_data_directory: "/var/lib/postgresql/{{ __postgresql_version }}/main"
-__postgresql_config_path: "/etc/postgresql/{{ __postgresql_version }}/main"
-__postgresql_hba_file: "{{ __postgresql_config_path }}/pg_hba.conf"
 __postgresql_daemon: postgresql
 __postgresql_repo_enabled: true
-__postgresql_user: postgres
-__postgresql_group: postgres
