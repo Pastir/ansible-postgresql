@@ -11,7 +11,9 @@ galaxy_info:
   platforms:
     - name: Ubuntu
       versions:
-        - focal
+        - 20
+        - 22
+        - 24
 
   galaxy_tags:
     - postgresql

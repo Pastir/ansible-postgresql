@@ -3,11 +3,10 @@
 - name: Apply the db tag to the include and to all tasks in db.yaml
   include_tasks:
     file: variables.yml
-    apply:
-      tags: always
-  tags: always
 
-- name: Include tasks install-{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml
+# Include tasks
+- name: Include tasks install-{{ ansible_distribution }}.yml
   include_tasks:
-    file: install-{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_major_version == '20'
+    file: install-{{ ansible_distribution }}.yml
+  when: ansible_distribution == 'Ubuntu'
+  tags: install

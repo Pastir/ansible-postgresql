@@ -1,8 +1,8 @@
 ---
 
 - name: Include Ubuntu variables.
-  include_vars: "{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yml"
-  when: ansible_distribution == 'Ubuntu' and ansible_distribution_major_version == '20'
+  include_vars: "{{ ansible_distribution }}.yml"
+  when: ansible_distribution == 'Ubuntu'
 
 - name: Define postgresql_version.
   set_fact:
@@ -14,13 +14,22 @@
     postgresql_daemon: "{{ __postgresql_daemon }}"
   when: postgresql_daemon is not defined
 
-- name: Define postgresql_data_dir.
+- name: Define postgresql_repo.
   set_fact:
-    postgresql_data_directory: "{{ __postgresql_data_directory }}"
-  when: postgresql_data_directory is not defined
+    postgresql_repo: "{{ __postgresql_repo }}"
+  when: postgresql_repo is not defined
 
-- name: Define postgresql_unix_socket_directories_mode.
+- name: Define repo_signing_key.
   set_fact:
-    postgresql_unix_socket_directories_mode: >-
-      {{ __postgresql_unix_socket_directories_mode | default('02775') }}
-  when: postgresql_unix_socket_directories_mode is not defined
+    repo_signing_key: "{{ __repo_signing_key }}"
+  when: repo_signing_key is not define
+
+- name: Define postgresql_repo_enabled.
+  set_fact:
+    postgresql_repo_enabled: "{{ __postgresql_repo_enabled }}"
+  when: postgresql_repo_enabled is not defined
+
+- name: Define postgresql_packages.
+  set_fact:
+    postgresql_repo: "{{ __postgresql_packages }}"
+  when: postgresql_packages is not defined
