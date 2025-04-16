@@ -1,12 +1,9 @@
 ---
-# Variable configuration.
-- name: Apply the db tag to the include and to all tasks in db.yaml
-  include_tasks:
-    file: variables.yml
+# Include variable based on the distribution.
+- name: Include variable based on the distribution.
+  ansible.builtin.include_vars: "vars/{{ ansible_distribution }}.yml"
 
 # Include tasks
-- name: Include tasks install-{{ ansible_distribution }}.yml
+- name: Include tasks based on the distribution.
   include_tasks:
-    file: install-{{ ansible_distribution }}.yml
-  when: ansible_distribution == 'Ubuntu'
-  tags: install
+    file: "{{ ansible_distribution }}.yml"

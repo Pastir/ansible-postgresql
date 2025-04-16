@@ -1,4 +1,4 @@
-# ansible-postgresql
+# ansible pastir.postgresql
 
 1. Default installation version PostgreSQL 17
 

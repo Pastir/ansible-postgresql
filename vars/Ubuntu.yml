@@ -1,13 +1,11 @@
----
-__postgresql_version: "17"
-__postgresql_repo:  "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main"
-__repo_signing_key: "https://www.postgresql.org/media/keys/ACCC4CF8.asc"
+__repo_signing_key_file: ACCC4CF8.asc
+__postgresql_repo: "deb [signed-by=/usr/share/keyrings/ACCC4CF8.asc] https://apt.postgresql.org/pub/repos/apt {{ ansible_distribution_release }}-pgdg main"
+__repo_signing_key: "https://www.postgresql.org/media/keys/{{ __repo_signing_key_file }}"
+__repo_signing_key_dir: "/usr/share/keyrings/{{ __repo_signing_key_file }}"
 __postgresql_daemon: postgresql
 __postgresql_repo_enabled: true
 __postgresql_packages:
-  - postgresql-{{ __postgresql_version }}
-  - postgresql-client-{{ __postgresql_version }}
+  - postgresql-{{ postgresql_version | default(__postgresql_version) }}
+  - postgresql-client-{{ postgresql_version | default(__postgresql_version) }}
   - libpq-dev
-  - postgresql-doc-{{ __postgresql_version }}
-
-
+  - postgresql-doc-{{ postgresql_version | default(__postgresql_version) }}
